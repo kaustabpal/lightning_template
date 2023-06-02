@@ -53,7 +53,7 @@ class BaseModel(pl.LightningModule):
         target_output = batch["target_output"]
         pred_output = self.forward(past)
         loss = self.loss(target_output, pred_output)
-        self.log("train/loss", loss["loss"])
+        self.log("train/loss", loss["loss"], prog_bar=True)
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -71,7 +71,7 @@ class BaseModel(pl.LightningModule):
         pred_output = self.forward(past)
         loss = self.loss(target_output, pred_output,"val", self.current_epoch)
 
-        self.log("val/loss", loss["loss"], on_epoch=True)
+        self.log("val/loss", loss["loss"], prog_bar=True, on_epoch=True)
 
     def test_step(self, batch, batch_idx):
         """Pytorch Lightning test step including logging
@@ -95,7 +95,7 @@ class BaseModel(pl.LightningModule):
 
         loss = self.loss(pred_output, target_output, "test", self.current_epoch)
 
-        self.log("test/loss", loss["loss"], on_epoch=True)
+        self.log("test/loss", loss["loss"], prog_bar=True, on_epoch=True)
 
         return loss
 
